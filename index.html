@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodVision AI - Criativos Alimentícios com IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6b35;
+            --secondary: #f4976c;
+            --dark: #2a2a2a;
+            --light: #f8f9fa;
+            --success: #4ade80;
+            --gradient: linear-gradient(135deg, var(--primary), #d83a56);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 20px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        #userGreeting {
+            display: flex;
+            align-items: center;
+        }
+
+        #loginBtn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        #loginBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.6);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: white;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+
+        .upload-area {
+            border: 3px dashed rgba(255,255,255,0.3);
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        textarea, input, select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        textarea:focus, input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .results-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .results-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .result-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .result-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .result-info {
+            padding: 15px;
+        }
+
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .result-type {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 107, 53, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .neuro-design-element {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: var(--gradient);
+            top: 10%;
+            right: 10%;
+            animation: floating 8s ease-in-out infinite;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: #d83a56;
+            bottom: 20%;
+            left: 5%;
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" fill="rgba(255,107,53,0.05)"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="rgba(255,107,53,0.05)"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="rgba(255,107,53,0.05)"/><path d="M0,0V5.63C149.93,59,314.09,71.78,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="rgba(255,107,53,0.05)"/></svg>');
+            background-size: cover;
+        }
+
+        .upgrade-prompt {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .upgrade-prompt h3 {
+            margin-bottom: 10px;
+            color: #ffcc00;
+        }
+
+        .upgrade-btn {
+            background: #00c853;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="neuro-design-element circle-1"></div>
+    <div class="neuro-design-element circle-2"></div>
+    
+    <div class="wave"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1 class="logo floating">FoodVision AI</h1>
+                <div id="userGreeting">
+                    <button id="loginBtn" class="btn" style="display: inline-flex; align-items: center;">
+                        <i class="fab fa-google" style="margin-right: 8px;"></i> Entrar com Google
+                    </button>
+                </div>
+            </div>
+            <p class="tagline">Transforme seu produto alimentício em criativos cinematográficos de alta fidelidade com IA avançada</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="upload-section">
+                <h2 class="section-title">Crie seu Criativo</h2>
+                
+                <div id="upgradePrompt" class="upgrade-prompt" style="display: none;">
+                    <h3><i class="fas fa-lock"></i> Limite de Teste Atingido</h3>
+                    <p>Você usou seus 3 créditos de teste gratuitos. Faça upgrade para continuar gerando criativos.</p>
+                    <button id="upgradeBtn" class="btn upgrade-btn">Assinar Plano Básico - R$14,93</button>
+                </div>
+                
+                <div class="upload-area pulse" id="dropArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p class="upload-text">Arraste sua imagem aqui ou clique para selecionar</p>
+                    <p class="upload-subtext">Suporte para JPG, PNG (Max 10MB)</p>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="input-group">
+                    <label for="productDescription">Descreva seu produto entre aspas:</label>
+                    <textarea id="productDescription" rows="3" placeholder="Ex: 'Hambúrguer artesanal com queijo derretido e bacon crocante'"></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label for="creativeType">Tipo de Criativo:</label>
+                    <select id="creativeType" class="input-control">
+                        <option value="static">Estático (Imagem)</option>
+                        <option value="cinematic" id="cinematicOption">Cinematográfico (Vídeo 15s)</option>
+                        <option value="both">Ambos</option>
+                    </select>
+                </div>
+                
+                <button id="generateBtn" class="btn pulse">
+                    <i class="fas fa-magic"></i> Gerar Criativo com IA
+                </button>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title">Seus Criativos</h2>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Gerando seu criativo cinematográfico ultra-realista...</p>
+                    <p>Isso pode levar alguns minutos</p>
+                </div>
+                
+                <div class="results-container" id="resultsContainer">
+                    <!-- Resultados serão inseridos aqui -->
+                    <div class="result-card">
+                        <div style="background: linear-gradient(45deg, #ff9a9e, #fad0c4); height: 180px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-utensils" style="font-size: 3rem; color: white;"></i>
+                        </div>
+                        <div class="result-info">
+                            <div class="result-title">Exemplo de Criativo</div>
+                            <div class="result-type">Vídeo Cinematográfico</div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div style="background: linear-gradient(45deg, #a1c4fd, #c2e9fb); height: 180px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image" style="font-size: 3rem; color: white;"></i>
+                        </div>
+                        <div class="result-info">
+                            <div class="result-title">Imagem Estática</div>
+                            <div class="result-type">Alta Fidelidade</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3 class="feature-title">Realismo Fotográfico</h3>
+                <p>Geramos criativos com qualidade cinematográfica e ultra-realismo que impressionam seu público</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="feature-title">Geração Rápida</h3>
+                <p>Criativos prontos em minutos com tecnologia de ponta da Alibaba Cloud e IA avançada</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title">Impacto de Vendas</h3>
+                <p>Criativos que aumentam o apelo visual e impulsionam as conversões do seu produto</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 FoodVision AI - Transformando alimentos em experiências visuais</p>
+            <p>Conectado à API Alibaba Cloud • Tecnologia de IA Avançada</p>
+        </footer>
+    </div>
+
+    <!-- Scripts do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // 1. Configuração do Firebase (SUBSTITUA PELOS SEUS DADOS DO FIREBASE)
+        // PARA FUNCIONAR, VOCÊ PRECISA CRIAR UM PROJETO NO FIREBASE E OBTER ESTAS CREDENCIAIS
+        const firebaseConfig = {
+            apiKey: "AIzaSyB1gSKdYkIqEshuofRfru7rfNKEyZRZ6xo",
+            authDomain: "delicious-87506.firebaseapp.com",
+            projectId: "delicious-87506",
+            storageBucket: "delicious-87506.firebasestorage.app",
+            messagingSenderId: "595074478796",
+            appId:  "1:595074478796:web:7600575dd473f057d10869"
+        };
+
+        // Inicializar o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Elementos DOM
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const loading = document.getElementById('loading');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const productDescription = document.getElementById('productDescription');
+        const creativeType = document.getElementById('creativeType');
+        const loginBtn = document.getElementById('loginBtn');
+        const userGreeting = document.getElementById('userGreeting');
+        const upgradePrompt = document.getElementById('upgradePrompt');
+        const upgradeBtn = document.getElementById('upgradeBtn');
+        const cinematicOption = document.getElementById('cinematicOption');
+
+        // Variáveis de controle
+        let currentUserData = null;
+
+        // 2. Função para fazer login com Google
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then(async (result) => {
+                    const user = result.user;
+                    console.log('Usuário logado:', user);
+                    
+                    // Verificar ou criar documento do usuário no Firestore
+                    await checkOrCreateUserDocument(user);
+                    updateUIForLoggedIn(user);
+                })
+                .catch((error) => {
+                    console.error('Erro no login:', error);
+                    alert('Erro ao fazer login: ' + error.message);
+                });
+        }
+
+        // 3. Função para verificar ou criar documento do usuário
+        async function checkOrCreateUserDocument(user) {
+            const userId = user.uid;
+            const userRef = db.collection('users').doc(userId);
+            
+            const doc = await userRef.get();
+            
+            if (!doc.exists) {
+                // Novo usuário - criar documento com plano gratuito e 3 créditos
+                await userRef.set({
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                    plan: 'free', // 'free' ou 'basic'
+                    credits: 3, // 3 créditos para plano gratuito
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                currentUserData = { plan: 'free', credits: 3 };
+            } else {
+                const data = doc.data();
+                currentUserData = data;
+            }
+            
+            updateCreditsDisplay();
+        }
+
+        // 4. Função para atualizar o saldo de créditos no frontend
+        function updateCreditsDisplay() {
+            if (!currentUserData) return;
+            
+            if (currentUserData.plan === 'free') {
+                if (currentUserData.credits <= 0) {
+                    upgradePrompt.style.display = 'block';
+                    generateBtn.disabled = true;
+                    generateBtn.classList.add('btn-outline');
+                    generateBtn.classList.remove('btn');
+                    generateBtn.textContent = 'Limite Atingido';
+                } else {
+                    upgradePrompt.style.display = 'none';
+                    generateBtn.disabled = false;
+                    generateBtn.classList.remove('btn-outline');
+                    generateBtn.classList.add('btn');
+                    generateBtn.innerHTML = `<i class="fas fa-magic"></i> Gerar (Créditos restantes: ${currentUserData.credits})`;
+                }
+                
+                // Desabilitar opção de vídeo para plano gratuito
+                cinematicOption.disabled = true;
+                if (creativeType.value === 'cinematic') {
+                    creativeType.value = 'static';
+                }
+            } else if (currentUserData.plan === 'basic') {
+                upgradePrompt.style.display = 'none';
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('btn-outline');
+                generateBtn.classList.add('btn');
+                generateBtn.innerHTML = '<i class="fas fa-magic"></i> Gerar Criativo com IA';
+                
+                // Habilitar opção de vídeo para plano básico
+                cinematicOption.disabled = false;
+            }
+        }
+
+        // 5. Função para atualizar a interface quando o usuário faz login
+        function updateUIForLoggedIn(user) {
+            userGreeting.innerHTML = `
+                <span style="margin-right: 15px;">Olá, ${user.displayName}!</span>
+                <button id="logoutBtn" class="btn btn-outline" style="margin-left: 10px;">Sair</button>
+            `;
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+        }
+
+        // 6. Função para fazer logout
+        function logout() {
+            auth.signOut()
+                .then(() => {
+                    console.log('Usuário deslogado');
+                    currentUserData = null;
+                    updateUIForLoggedOut();
+                })
+                .catch((error) => {
+                    console.error('Erro no logout:', error);
+                });
+        }
+
+        // 7. Atualizar a interface quando o usuário faz logout
+        function updateUIForLoggedOut() {
+            userGreeting.innerHTML = `
+                <button id="loginBtn" class="btn" style="display: inline-flex; align-items: center;">
+                    <i class="fab fa-google" style="margin-right: 8px;"></i> Entrar com Google
+                </button>
+            `;
+            document.getElementById('loginBtn').addEventListener('click', loginWithGoogle);
+            upgradePrompt.style.display = 'none';
+            generateBtn.disabled = false;
+            generateBtn.classList.remove('btn-outline');
+            generateBtn.classList.add('btn');
+            generateBtn.innerHTML = '<i class="fas fa-magic"></i> Gerar Criativo com IA';
+        }
+
+        // 8. Verificar estado de login ao carregar a página
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                // Atualizar dados do usuário do Firestore
+                const userRef = db.collection('users').doc(user.uid);
+                const doc = await userRef.get();
+                if (doc.exists) {
+                    currentUserData = doc.data();
+                }
+                updateUIForLoggedIn(user);
+                updateCreditsDisplay();
+            } else {
+                updateUIForLoggedOut();
+            }
+        });
+
+        // Eventos de drag and drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropArea.style.borderColor = 'var(--primary)';
+            dropArea.style.backgroundColor = 'rgba(255, 107, 53, 0.1)';
+        }
+        
+        function unhighlight() {
+            dropArea.style.borderColor = 'rgba(255,255,255,0.3)';
+            dropArea.style.backgroundColor = 'transparent';
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+        
+        dropArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', () => {
+            handleFiles(fileInput.files);
+        });
+        
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.match('image.*')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        dropArea.innerHTML = `
+                            <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                            <p class="upload-text">Imagem carregada com sucesso!</p>
+                            <p>${file.name}</p>
+                        `;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+        
+        // Função de geração de criativo
+        generateBtn.addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) {
+                alert('Por favor, faça login para gerar criativos');
+                return;
+            }
+            
+            if (!currentUserData) {
+                alert('Erro ao carregar dados do usuário. Faça login novamente.');
+                return;
+            }
+            
+            const description = productDescription.value.trim();
+            const type = creativeType.value;
+            
+            if (!description) {
+                alert('Por favor, descreva seu produto entre aspas');
+                return;
+            }
+            
+            if (!fileInput.files.length) {
+                alert('Por favor, selecione uma imagem do produto');
+                return;
+            }
+            
+            // Verificar limites de uso
+            if (currentUserData.plan === 'free') {
+                if (currentUserData.credits <= 0) {
+                    alert('Você atingiu o limite de testes gratuitos. Faça upgrade para continuar.');
+                    return;
+                }
+                
+                // Plano gratuito só pode gerar imagens estáticas
+                if (type === 'cinematic') {
+                    alert('Vídeos cinematográficos estão disponíveis apenas no plano Básico.');
+                    return;
+                }
+            }
+            
+            // Mostrar loading
+            loading.style.display = 'block';
+            resultsContainer.innerHTML = '';
+            
+            try {
+                // Simular chamada à API Alibaba Cloud
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                // Gerar resultados simulados
+                generateResults(type);
+                
+                // Atualizar créditos no Firestore se for plano gratuito
+                if (currentUserData.plan === 'free') {
+                    const newCredits = currentUserData.credits - 1;
+                    await db.collection('users').doc(user.uid).update({
+                        credits: newCredits
+                    });
+                    currentUserData.credits = newCredits;
+                    updateCreditsDisplay();
+                }
+                
+            } catch (error) {
+                console.error('Erro na geração:', error);
+                alert('Erro ao gerar criativo. Tente novamente.');
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+        
+        function generateResults(type) {
+            resultsContainer.innerHTML = '';
+            
+            if (type === 'cinematic' || type === 'both') {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'result-card';
+                videoCard.innerHTML = `
+                    <div style="background: linear-gradient(45deg, #ff6b35, #d83a56); height: 180px; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <i class="fas fa-play-circle" style="font-size: 4rem; color: rgba(255,255,255,0.8);"></i>
+                        <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 10px; font-size: 0.8rem;">
+                            15s
+                        </div>
+                    </div>
+                    <div class="result-info">
+                        <div class="result-title">Vídeo Cinematográfico</div>
+                        <div class="result-type">Ultra-realista • 4K</div>
+                    </div>
+                `;
+                resultsContainer.appendChild(videoCard);
+            }
+            
+            if (type === 'static' || type === 'both') {
+                const imageCard = document.createElement('div');
+                imageCard.className = 'result-card';
+                imageCard.innerHTML = `
+                    <div style="background: linear-gradient(45deg, #a1c4fd, #c2e9fb); height: 180px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-image" style="font-size: 3rem; color: white;"></i>
+                    </div>
+                    <div class="result-info">
+                        <div class="result-title">Imagem Estática</div>
+                        <div class="result-type">Alta Fidelidade • 8K</div>
+                    </div>
+                `;
+                resultsContainer.appendChild(imageCard);
+            }
+        }
+
+        // Evento para botão de upgrade
+        upgradeBtn.addEventListener('click', () => {
+            // Aqui você pode redirecionar para uma página de checkout
+            // Por enquanto, vamos simular a mudança de plano
+            alert('Funcionalidade de upgrade será implementada com integração de pagamento (ex: Stripe, Pagar.me)');
+            // Simular upgrade para plano básico
+            // updateUserPlan('basic');
+        });
+    </script>
+</body>
+</html>
