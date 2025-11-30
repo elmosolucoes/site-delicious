@@ -541,12 +541,12 @@
         // 1. Configuração do Firebase (SUBSTITUA PELOS SEUS DADOS DO FIREBASE)
         // PARA FUNCIONAR, VOCÊ PRECISA CRIAR UM PROJETO NO FIREBASE E OBTER ESTAS CREDENCIAIS
         const firebaseConfig = {
-            apiKey: "AIzaSyB1gSKdYkIqEshuofRfru7rfNKEyZRZ6xo",
-            authDomain: "delicious-87506.firebaseapp.com",
-            projectId: "delicious-87506",
-            storageBucket: "delicious-87506.firebasestorage.app",
-            messagingSenderId: "595074478796",
-            appId:  "1:595074478796:web:7600575dd473f057d10869"
+            apiKey: "AIzaSy...",
+            authDomain: "seuprojeto.firebaseapp.com",
+            projectId: "seuprojeto",
+            storageBucket: "seuprojeto.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
         };
 
         // Inicializar o Firebase
@@ -765,7 +765,7 @@
             }
         }
         
-        // Função de geração de criativo
+        // Função de geração de criativo (chama o backend que se conecta à Hugging Face)
         generateBtn.addEventListener('click', async () => {
             const user = auth.currentUser;
             if (!user) {
@@ -810,11 +810,39 @@
             resultsContainer.innerHTML = '';
             
             try {
-                // Simular chamada à API Alibaba Cloud
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                // Chamar o backend que se conecta à Hugging Face
+                const formData = new FormData();
+                formData.append('prompt', description);
+                formData.append('type', type);
                 
-                // Gerar resultados simulados
-                generateResults(type);
+                // Converter imagem para URL temporária (ou enviar como base64)
+                const imageFile = fileInput.files[0];
+                const imageUrl = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.readAsDataURL(imageFile);
+                });
+                
+                const response = await fetch('/api/generate', { // Substitua pela URL do seu backend
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        prompt: description,
+                        type: type,
+                        imageUrl: imageUrl
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erro na geração do criativo');
+                }
+                
+                const result = await response.json();
+                
+                // Exibir resultados reais
+                displayResult(result, type);
                 
                 // Atualizar créditos no Firestore se for plano gratuito
                 if (currentUserData.plan === 'free') {
@@ -834,40 +862,41 @@
             }
         });
         
-        function generateResults(type) {
+        // Função para exibir resultados reais da Hugging Face
+        function displayResult(result, type) {
             resultsContainer.innerHTML = '';
             
             if (type === 'cinematic' || type === 'both') {
-                const videoCard = document.createElement('div');
-                videoCard.className = 'result-card';
-                videoCard.innerHTML = `
-                    <div style="background: linear-gradient(45deg, #ff6b35, #d83a56); height: 180px; display: flex; align-items: center; justify-content: center; position: relative;">
-                        <i class="fas fa-play-circle" style="font-size: 4rem; color: rgba(255,255,255,0.8);"></i>
-                        <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 10px; font-size: 0.8rem;">
-                            15s
+                if (result.video_url) {
+                    const videoCard = document.createElement('div');
+                    videoCard.className = 'result-card';
+                    videoCard.innerHTML = `
+                        <video controls style="width: 100%; height: 180px; object-fit: cover;">
+                            <source src="${result.video_url}" type="video/mp4">
+                            Seu navegador não suporta vídeos.
+                        </video>
+                        <div class="result-info">
+                            <div class="result-title">Vídeo Cinematográfico</div>
+                            <div class="result-type">Gerado com IA</div>
                         </div>
-                    </div>
-                    <div class="result-info">
-                        <div class="result-title">Vídeo Cinematográfico</div>
-                        <div class="result-type">Ultra-realista • 4K</div>
-                    </div>
-                `;
-                resultsContainer.appendChild(videoCard);
+                    `;
+                    resultsContainer.appendChild(videoCard);
+                }
             }
             
             if (type === 'static' || type === 'both') {
-                const imageCard = document.createElement('div');
-                imageCard.className = 'result-card';
-                imageCard.innerHTML = `
-                    <div style="background: linear-gradient(45deg, #a1c4fd, #c2e9fb); height: 180px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-image" style="font-size: 3rem; color: white;"></i>
-                    </div>
-                    <div class="result-info">
-                        <div class="result-title">Imagem Estática</div>
-                        <div class="result-type">Alta Fidelidade • 8K</div>
-                    </div>
-                `;
-                resultsContainer.appendChild(imageCard);
+                if (result.image_url) {
+                    const imageCard = document.createElement('div');
+                    imageCard.className = 'result-card';
+                    imageCard.innerHTML = `
+                        <img src="${result.image_url}" class="result-image" alt="Imagem gerada">
+                        <div class="result-info">
+                            <div class="result-title">Imagem Estática</div>
+                            <div class="result-type">Gerada com IA</div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(imageCard);
+                }
             }
         }
 
