@@ -814,8 +814,8 @@
                 let result = { image_url: null, video_url: null };
 
                 if (type === 'static' || type === 'both') {
-                    console.log("Iniciando geração de imagem com o modelo: stabilityai/stable-diffusion-xl-base-1.0");
-                    const imageModelUrl = "https://router.huggingface.co/openai/stabilityai/stable-diffusion-xl-base-1.0";
+                    console.log("Iniciando geração de imagem com o modelo: runwayml/stable-diffusion-v1-5");
+                    const imageModelUrl = "https://router.huggingface.co/openai/runwayml/stable-diffusion-v1-5";
 
                     const imageResponse = await fetch(imageModelUrl, {
                         method: 'POST',
@@ -877,8 +877,6 @@
                     // Para exibir o vídeo, você precisaria de um backend para processar os frames.
                     alert("Vídeo gerado com sucesso (mas não pode ser exibido diretamente do navegador sem um backend).");
 
-                    // O código abaixo para criar um vídeo não funcionará com o array de frames retornado diretamente.
-                    // result.video_url = URL.createObjectURL(new Blob([JSON.stringify(videoData)], { type: 'application/json' })); // Isso não é um vídeo
                 }
 
                 // Exibir resultados reais
